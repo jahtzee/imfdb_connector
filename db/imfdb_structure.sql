@@ -68,8 +68,9 @@ CREATE TABLE public.firearms (
     firearmpagecontent character varying,
     specificationid uuid,
     firearmtitle character varying NOT NULL,
-    firearmcategory character varying,
-    isfamily boolean
+    firearmversion character varying,
+    isfamily boolean,
+    isfictional boolean
 );
 
 
@@ -83,10 +84,10 @@ COMMENT ON COLUMN public.firearms.firearmtitle IS 'Page title / name';
 
 
 --
--- Name: COLUMN firearms.firearmcategory; Type: COMMENT; Schema: public; Owner: imfdb
+-- Name: COLUMN firearms.firearmversion; Type: COMMENT; Schema: public; Owner: imfdb
 --
 
-COMMENT ON COLUMN public.firearms.firearmcategory IS 'For example, ''Non-firing Replica'', ''Civilian Version'', ''Soviet Version''';
+COMMENT ON COLUMN public.firearms.firearmversion IS 'For example, ''Non-firing Replica'', ''Civilian Version'', ''Soviet Version''';
 
 
 --
@@ -94,6 +95,13 @@ COMMENT ON COLUMN public.firearms.firearmcategory IS 'For example, ''Non-firing 
 --
 
 COMMENT ON COLUMN public.firearms.isfamily IS 'This entry refers to a series or family';
+
+
+--
+-- Name: COLUMN firearms.isfictional; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.firearms.isfictional IS 'Entirely fictional or fake prop gun';
 
 
 --
@@ -156,14 +164,13 @@ COMMENT ON COLUMN public.movies_actors_firearms.year IS 'Year of the appearance'
 CREATE TABLE public.specifications (
     specificationid uuid DEFAULT gen_random_uuid() NOT NULL,
     firearmid uuid NOT NULL,
-    productionyear smallint,
-    productionyearend smallint DEFAULT 9999,
     type character varying,
     caliber character varying,
     capacity character varying,
     caliberlist character varying,
     capacitylist character varying,
-    firemode character varying
+    firemode character varying,
+    productiontimeframe character varying
 );
 
 
@@ -181,20 +188,6 @@ COMMENT ON TABLE public.specifications IS 'Firearm specifications';
 --
 
 COMMENT ON COLUMN public.specifications.firearmid IS 'The UUID of the firearm this spec belongs to';
-
-
---
--- Name: COLUMN specifications.productionyear; Type: COMMENT; Schema: public; Owner: imfdb
---
-
-COMMENT ON COLUMN public.specifications.productionyear IS 'The year production started';
-
-
---
--- Name: COLUMN specifications.productionyearend; Type: COMMENT; Schema: public; Owner: imfdb
---
-
-COMMENT ON COLUMN public.specifications.productionyearend IS 'The year production ended in. If equal to productionyear, production ended within a year. If equal to 9999, production continues to date.';
 
 
 --
