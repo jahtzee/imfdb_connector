@@ -1,0 +1,1 @@
+TRUNCATE TABLE actors, firearms, movies, movies_actors_firearms, specifications, tvseries, tvseries_actors_firearms;

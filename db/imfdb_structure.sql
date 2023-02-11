@@ -57,11 +57,367 @@ COMMENT ON COLUMN public.actors.actorname IS 'Full name of the actor';
 
 
 --
+-- Name: firearms; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.firearms (
+    firearmid uuid DEFAULT gen_random_uuid() NOT NULL,
+    firearmurl character varying,
+    parentfirearmid uuid,
+    firearmpageid character varying NOT NULL,
+    firearmpagecontent character varying,
+    specificationid uuid,
+    firearmtitle character varying NOT NULL,
+    firearmcategory character varying,
+    isfamily boolean
+);
+
+
+ALTER TABLE public.firearms OWNER TO imfdb;
+
+--
+-- Name: COLUMN firearms.firearmtitle; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.firearms.firearmtitle IS 'Page title / name';
+
+
+--
+-- Name: COLUMN firearms.firearmcategory; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.firearms.firearmcategory IS 'For example, ''Non-firing Replica'', ''Civilian Version'', ''Soviet Version''';
+
+
+--
+-- Name: COLUMN firearms.isfamily; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.firearms.isfamily IS 'This entry refers to a series or family';
+
+
+--
+-- Name: movies; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.movies (
+    movieid uuid DEFAULT gen_random_uuid() NOT NULL,
+    movietitle character varying NOT NULL,
+    movieurl character varying,
+    moviepageid character varying NOT NULL,
+    moviepagecontent character varying
+);
+
+
+ALTER TABLE public.movies OWNER TO imfdb;
+
+--
+-- Name: movies_actors_firearms; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.movies_actors_firearms (
+    movieid uuid NOT NULL,
+    firearmid uuid NOT NULL,
+    moviesactorsfirearmsid uuid DEFAULT gen_random_uuid() NOT NULL,
+    "character" character varying,
+    note character varying,
+    year smallint,
+    actorid uuid NOT NULL
+);
+
+
+ALTER TABLE public.movies_actors_firearms OWNER TO imfdb;
+
+--
+-- Name: COLUMN movies_actors_firearms."character"; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.movies_actors_firearms."character" IS 'Name of the role the actor played';
+
+
+--
+-- Name: COLUMN movies_actors_firearms.note; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.movies_actors_firearms.note IS 'Any additional information';
+
+
+--
+-- Name: COLUMN movies_actors_firearms.year; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.movies_actors_firearms.year IS 'Year of the appearance';
+
+
+--
+-- Name: specifications; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.specifications (
+    specificationid uuid DEFAULT gen_random_uuid() NOT NULL,
+    firearmid uuid NOT NULL,
+    productionyear smallint,
+    productionyearend smallint DEFAULT 9999,
+    type character varying,
+    caliber character varying,
+    capacity character varying,
+    caliberlist character varying,
+    capacitylist character varying,
+    firemode character varying
+);
+
+
+ALTER TABLE public.specifications OWNER TO imfdb;
+
+--
+-- Name: TABLE specifications; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON TABLE public.specifications IS 'Firearm specifications';
+
+
+--
+-- Name: COLUMN specifications.firearmid; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.specifications.firearmid IS 'The UUID of the firearm this spec belongs to';
+
+
+--
+-- Name: COLUMN specifications.productionyear; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.specifications.productionyear IS 'The year production started';
+
+
+--
+-- Name: COLUMN specifications.productionyearend; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.specifications.productionyearend IS 'The year production ended in. If equal to productionyear, production ended within a year. If equal to 9999, production continues to date.';
+
+
+--
+-- Name: COLUMN specifications.type; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.specifications.type IS 'Firearm type. For example: ''Revolver'', ''Battle Rifle'', ''Pistol''';
+
+
+--
+-- Name: COLUMN specifications.caliber; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.specifications.caliber IS 'Original caliber';
+
+
+--
+-- Name: COLUMN specifications.capacity; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.specifications.capacity IS 'Original capacity';
+
+
+--
+-- Name: COLUMN specifications.caliberlist; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.specifications.caliberlist IS 'List of compatible cartridge types';
+
+
+--
+-- Name: COLUMN specifications.capacitylist; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.specifications.capacitylist IS 'List of capacities for available magazines, clips, drums or chambers';
+
+
+--
+-- Name: COLUMN specifications.firemode; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.specifications.firemode IS 'List of available fire modes. For example: ''semi-automatic (double action)'', ''3-round burst''';
+
+
+--
+-- Name: tvseries; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.tvseries (
+    tvseriesid uuid DEFAULT gen_random_uuid() NOT NULL,
+    tvseriestitle character varying NOT NULL,
+    tvseriesurl character varying,
+    tvseriespageid character varying NOT NULL,
+    tvseriespagecontent character varying
+);
+
+
+ALTER TABLE public.tvseries OWNER TO imfdb;
+
+--
+-- Name: tvseries_actors_firearms; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.tvseries_actors_firearms (
+    tvseriesid uuid NOT NULL,
+    firearmid uuid NOT NULL,
+    tvseriesactorsfirearmsid uuid DEFAULT gen_random_uuid() NOT NULL,
+    "character" character varying,
+    note character varying,
+    year smallint,
+    actorid uuid NOT NULL
+);
+
+
+ALTER TABLE public.tvseries_actors_firearms OWNER TO imfdb;
+
+--
+-- Name: COLUMN tvseries_actors_firearms."character"; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.tvseries_actors_firearms."character" IS 'Name of the role the actor played';
+
+
+--
+-- Name: COLUMN tvseries_actors_firearms.note; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.tvseries_actors_firearms.note IS 'Any additional information';
+
+
+--
+-- Name: COLUMN tvseries_actors_firearms.year; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON COLUMN public.tvseries_actors_firearms.year IS 'Year of the appearance';
+
+
+--
 -- Name: actors actors_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
 --
 
 ALTER TABLE ONLY public.actors
     ADD CONSTRAINT actors_pk PRIMARY KEY (actorid);
+
+
+--
+-- Name: firearms firearms_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.firearms
+    ADD CONSTRAINT firearms_pk PRIMARY KEY (firearmid);
+
+
+--
+-- Name: movies_actors_firearms movies_actors_firearms_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.movies_actors_firearms
+    ADD CONSTRAINT movies_actors_firearms_pk PRIMARY KEY (moviesactorsfirearmsid);
+
+
+--
+-- Name: movies movies_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.movies
+    ADD CONSTRAINT movies_pk PRIMARY KEY (movieid);
+
+
+--
+-- Name: specifications specifications_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.specifications
+    ADD CONSTRAINT specifications_pk PRIMARY KEY (specificationid);
+
+
+--
+-- Name: tvseries_actors_firearms tvseries_actors_firearms_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.tvseries_actors_firearms
+    ADD CONSTRAINT tvseries_actors_firearms_pk PRIMARY KEY (tvseriesactorsfirearmsid);
+
+
+--
+-- Name: tvseries tvseries_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.tvseries
+    ADD CONSTRAINT tvseries_pk PRIMARY KEY (tvseriesid);
+
+
+--
+-- Name: firearms firearms_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.firearms
+    ADD CONSTRAINT firearms_fk FOREIGN KEY (parentfirearmid) REFERENCES public.firearms(firearmid) ON UPDATE SET NULL ON DELETE CASCADE;
+
+
+--
+-- Name: firearms firearms_spec_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.firearms
+    ADD CONSTRAINT firearms_spec_fk FOREIGN KEY (specificationid) REFERENCES public.specifications(specificationid) ON UPDATE SET NULL ON DELETE CASCADE;
+
+
+--
+-- Name: movies_actors_firearms movies_actors_firearms_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.movies_actors_firearms
+    ADD CONSTRAINT movies_actors_firearms_fk FOREIGN KEY (actorid) REFERENCES public.actors(actorid);
+
+
+--
+-- Name: movies_actors_firearms movies_actors_firearms_fk_1; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.movies_actors_firearms
+    ADD CONSTRAINT movies_actors_firearms_fk_1 FOREIGN KEY (movieid) REFERENCES public.movies(movieid);
+
+
+--
+-- Name: movies_actors_firearms movies_actors_firearms_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.movies_actors_firearms
+    ADD CONSTRAINT movies_actors_firearms_fk_2 FOREIGN KEY (firearmid) REFERENCES public.firearms(firearmid);
+
+
+--
+-- Name: specifications specifications_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.specifications
+    ADD CONSTRAINT specifications_fk FOREIGN KEY (firearmid) REFERENCES public.firearms(firearmid) ON UPDATE SET NULL ON DELETE CASCADE;
+
+
+--
+-- Name: tvseries_actors_firearms tvseries_actors_firearms_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.tvseries_actors_firearms
+    ADD CONSTRAINT tvseries_actors_firearms_fk FOREIGN KEY (actorid) REFERENCES public.actors(actorid);
+
+
+--
+-- Name: tvseries_actors_firearms tvseries_actors_firearms_fk_1; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.tvseries_actors_firearms
+    ADD CONSTRAINT tvseries_actors_firearms_fk_1 FOREIGN KEY (tvseriesid) REFERENCES public.tvseries(tvseriesid);
+
+
+--
+-- Name: tvseries_actors_firearms tvseries_actors_firearms_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.tvseries_actors_firearms
+    ADD CONSTRAINT tvseries_actors_firearms_fk_2 FOREIGN KEY (firearmid) REFERENCES public.firearms(firearmid);
 
 
 --
