@@ -70,7 +70,7 @@ CREATE TABLE public.firearms (
     firearmtitle character varying NOT NULL,
     firearmversion character varying,
     isfamily boolean,
-    isfictional boolean
+    isfictional boolean DEFAULT false
 );
 
 
@@ -130,7 +130,7 @@ CREATE TABLE public.movies_actors_firearms (
     "character" character varying,
     note character varying,
     year smallint,
-    actorid uuid NOT NULL
+    actorid uuid
 );
 
 
@@ -155,6 +155,28 @@ COMMENT ON COLUMN public.movies_actors_firearms.note IS 'Any additional informat
 --
 
 COMMENT ON COLUMN public.movies_actors_firearms.year IS 'Year of the appearance';
+
+
+--
+-- Name: redirects; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.redirects (
+    redirectid character varying DEFAULT gen_random_uuid() NOT NULL,
+    totitle character varying NOT NULL,
+    topageid character varying NOT NULL,
+    fromtitle character varying NOT NULL,
+    frompageid character varying NOT NULL
+);
+
+
+ALTER TABLE public.redirects OWNER TO imfdb;
+
+--
+-- Name: TABLE redirects; Type: COMMENT; Schema: public; Owner: imfdb
+--
+
+COMMENT ON TABLE public.redirects IS 'Keeps track of MediaWiki page redirects';
 
 
 --
@@ -315,6 +337,14 @@ ALTER TABLE ONLY public.movies_actors_firearms
 
 ALTER TABLE ONLY public.movies
     ADD CONSTRAINT movies_pk PRIMARY KEY (movieid);
+
+
+--
+-- Name: redirects redirects_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.redirects
+    ADD CONSTRAINT redirects_pk PRIMARY KEY (redirectid);
 
 
 --
