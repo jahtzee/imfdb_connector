@@ -6,3 +6,7 @@ candidates.txt
 db/imfdb_11_02_2023_23_46.sql
 db/imfdb_14_02_2023_15_14.sql
 db/imfdb_alles_ausser_junction_tables.sql
+data.xlsx
+skip.csv
+skip.csv
+~$data.xlsx
