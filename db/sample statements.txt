@@ -1,0 +1,11 @@
+most used guns in movies by decreasing order of appearances:
+
+select f.firearmtitle, count(moviesactorsfirearmsid) as appearance 
+from movies_actors_firearms maf 
+inner join firearms f on maf.firearmid = f.firearmid 
+where f.isfamily = false group by f.firearmtitle order by 2 desc
+
+select f.firearmtitle, (select m.movietitle from movies m where m.movieid = maf.movieid) from movies_actors_firearms maf inner join firearms f on maf.firearmid = f.firearmid 
+where maf.actorid = (select a.actorid from actors a where a.actorname = 'Arnold Schwarzenegger')
+and f.isfamily = false
+and f.isfictional = false

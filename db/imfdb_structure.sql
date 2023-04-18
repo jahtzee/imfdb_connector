@@ -21,6 +21,19 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: actorimages; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.actorimages (
+    actorimageid uuid DEFAULT gen_random_uuid() NOT NULL,
+    imageurl character varying NOT NULL,
+    actorid uuid NOT NULL
+);
+
+
+ALTER TABLE public.actorimages OWNER TO imfdb;
+
+--
 -- Name: actors; Type: TABLE; Schema: public; Owner: imfdb
 --
 
@@ -55,6 +68,19 @@ COMMENT ON COLUMN public.actors.actorpagecontent IS 'The HTML data of the actor 
 
 COMMENT ON COLUMN public.actors.actorname IS 'Full name of the actor';
 
+
+--
+-- Name: firearmimages; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.firearmimages (
+    firearmimageid uuid DEFAULT gen_random_uuid() NOT NULL,
+    imageurl character varying NOT NULL,
+    firearmid uuid NOT NULL
+);
+
+
+ALTER TABLE public.firearmimages OWNER TO imfdb;
 
 --
 -- Name: firearms; Type: TABLE; Schema: public; Owner: imfdb
@@ -103,6 +129,19 @@ COMMENT ON COLUMN public.firearms.isfamily IS 'This entry refers to a series or 
 
 COMMENT ON COLUMN public.firearms.isfictional IS 'Entirely fictional or fake prop gun';
 
+
+--
+-- Name: movieimages; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.movieimages (
+    movieimageid uuid DEFAULT gen_random_uuid() NOT NULL,
+    imageurl character varying NOT NULL,
+    movieid uuid NOT NULL
+);
+
+
+ALTER TABLE public.movieimages OWNER TO imfdb;
 
 --
 -- Name: movies; Type: TABLE; Schema: public; Owner: imfdb
@@ -279,7 +318,7 @@ CREATE TABLE public.tvseries_actors_firearms (
     tvseriesactorsfirearmsid uuid DEFAULT gen_random_uuid() NOT NULL,
     "character" character varying,
     note character varying,
-    year smallint,
+    year character varying,
     actorid uuid NOT NULL
 );
 
@@ -308,6 +347,19 @@ COMMENT ON COLUMN public.tvseries_actors_firearms.year IS 'Year of the appearanc
 
 
 --
+-- Name: tvseriesimages; Type: TABLE; Schema: public; Owner: imfdb
+--
+
+CREATE TABLE public.tvseriesimages (
+    tvseriesimageid uuid DEFAULT gen_random_uuid() NOT NULL,
+    imageurl character varying NOT NULL,
+    tvseriesid uuid NOT NULL
+);
+
+
+ALTER TABLE public.tvseriesimages OWNER TO imfdb;
+
+--
 -- Name: actors actors_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
 --
 
@@ -316,11 +368,35 @@ ALTER TABLE ONLY public.actors
 
 
 --
+-- Name: firearmimages firearmimages_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.firearmimages
+    ADD CONSTRAINT firearmimages_pk PRIMARY KEY (firearmimageid);
+
+
+--
 -- Name: firearms firearms_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
 --
 
 ALTER TABLE ONLY public.firearms
     ADD CONSTRAINT firearms_pk PRIMARY KEY (firearmid);
+
+
+--
+-- Name: actorimages images_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.actorimages
+    ADD CONSTRAINT images_pk PRIMARY KEY (actorimageid);
+
+
+--
+-- Name: movieimages movieimages_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.movieimages
+    ADD CONSTRAINT movieimages_pk PRIMARY KEY (movieimageid);
 
 
 --
@@ -372,6 +448,22 @@ ALTER TABLE ONLY public.tvseries
 
 
 --
+-- Name: tvseriesimages tvseriesimages_pk; Type: CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.tvseriesimages
+    ADD CONSTRAINT tvseriesimages_pk PRIMARY KEY (tvseriesimageid);
+
+
+--
+-- Name: firearmimages firearmimages_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.firearmimages
+    ADD CONSTRAINT firearmimages_fk FOREIGN KEY (firearmid) REFERENCES public.firearms(firearmid);
+
+
+--
 -- Name: firearms firearms_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
 --
 
@@ -385,6 +477,22 @@ ALTER TABLE ONLY public.firearms
 
 ALTER TABLE ONLY public.firearms
     ADD CONSTRAINT firearms_spec_fk FOREIGN KEY (specificationid) REFERENCES public.specifications(specificationid) ON UPDATE SET NULL ON DELETE CASCADE;
+
+
+--
+-- Name: actorimages images_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.actorimages
+    ADD CONSTRAINT images_fk FOREIGN KEY (actorid) REFERENCES public.actors(actorid);
+
+
+--
+-- Name: movieimages movieimages_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.movieimages
+    ADD CONSTRAINT movieimages_fk FOREIGN KEY (movieid) REFERENCES public.movies(movieid);
 
 
 --
@@ -441,6 +549,14 @@ ALTER TABLE ONLY public.tvseries_actors_firearms
 
 ALTER TABLE ONLY public.tvseries_actors_firearms
     ADD CONSTRAINT tvseries_actors_firearms_fk_2 FOREIGN KEY (firearmid) REFERENCES public.firearms(firearmid);
+
+
+--
+-- Name: tvseriesimages tvseriesimages_fk; Type: FK CONSTRAINT; Schema: public; Owner: imfdb
+--
+
+ALTER TABLE ONLY public.tvseriesimages
+    ADD CONSTRAINT tvseriesimages_fk FOREIGN KEY (tvseriesid) REFERENCES public.tvseries(tvseriesid);
 
 
 --
